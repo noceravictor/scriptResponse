@@ -37,6 +37,7 @@ const manipulateValues = values => {
 
 const manipulateData = data => {
   const response = []
+  // const value = [values]
   data.dialog_nodes.forEach(dialog => {
     if (
       (dialog.context &&
@@ -51,7 +52,9 @@ const manipulateData = data => {
       response.push({
         title: dialog.title,
         parent: dialog.parent,
-        dialog_node: dialog.dialog_node
+        dialog_node: dialog.dialog_node,
+        jump: dialog.next_step ? dialog.next_step.dialog_node : null,
+        text: dialog.output.text ? dialog.output.text.values : null
       })
     }
   })
@@ -61,7 +64,7 @@ const manipulateData = data => {
 const parseCvs = async data => {
   jsonexport(data, function(err, csv) {
     if (err) return console.log(err)
-    fs.writeFileSync('resultadoBusca.csv', csv)
+    fs.writeFileSync('teste.csv', csv)
   })
 }
 
@@ -70,6 +73,10 @@ const init = async () => {
   const response = await manipulateData(data)
   parseCvs(response)
   console.log(response)
+}
+
+module.exports = {
+  response
 }
 
 init()
